@@ -11,7 +11,7 @@ export const ItemList = () => {
   );
 };
 
-const ItemListWrapper = styled.section`
+const ItemListWrapper = styled.div`
   padding: 30px 50px;
   min-height: 200px;
 `;

@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 const AppContainer = styled.div`
-  margin: 100px 150px;
+  margin: 50px 150px;
 `;
 
 export default MyApp;
