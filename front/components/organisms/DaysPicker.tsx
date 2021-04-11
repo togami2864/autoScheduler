@@ -19,7 +19,7 @@ export const DaysPicker: React.FC = () => {
         colorScheme="blue"
         aria-label="move to tomorrow"
         icon={<ArrowLeftIcon />}
-        onClick={moveToNextDay}
+        onClick={moveToPrevDay}
       />
       <DateWrapper>
         <DateDisplay>{format(day, 'yyyy/MM/dd')}</DateDisplay>
@@ -30,7 +30,7 @@ export const DaysPicker: React.FC = () => {
         colorScheme="blue"
         aria-label="move to yesterday"
         icon={<ArrowRightIcon />}
-        onClick={moveToPrevDay}
+        onClick={moveToNextDay}
       />
     </DaysPickerContainer>
   );
@@ -40,6 +40,7 @@ const DaysPickerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0 0 20px;
 `;
 
 const DateWrapper = styled.div`
