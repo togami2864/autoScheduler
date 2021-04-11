@@ -1,8 +1,15 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
-import { ServerStyleSheet } from "styled-components";
+import React from 'react';
+import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { ServerStyleSheet } from 'styled-components';
 
 class MyDocument extends Document {
-  static async getInitialProps(ctx) {
+  static async getInitialProps(
+    ctx,
+  ): Promise<{
+    styles: JSX.Element;
+    html: string;
+    head?: JSX.Element[];
+  }> {
     const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
 
