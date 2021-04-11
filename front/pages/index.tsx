@@ -1,5 +1,7 @@
-import Head from "next/head";
+import Head from 'next/head';
+import styled from 'styled-components';
+import { DaysPicker } from '../components/organisms/DaysPicker';
 
 export default function Home() {
-  return <h1>Hello</h1>;
+  return <DaysPicker />;
 }
