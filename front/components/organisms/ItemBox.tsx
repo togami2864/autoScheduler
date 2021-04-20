@@ -16,4 +16,5 @@ export const ItemBox: React.FC = () => {
 
 const ItemBoxWrapper = styled.div`
   display: flex;
+  margin: 20px 0;
 `;
