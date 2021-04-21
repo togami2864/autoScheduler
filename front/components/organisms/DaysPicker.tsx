@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
+import { useRecoilState } from 'recoil';
+import { dateState } from '../../states/dataState';
 import styled from 'styled-components';
 import { ArrowRightIcon, ArrowLeftIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
@@ -6,7 +8,7 @@ import format from 'date-fns/format';
 import add from 'date-fns/add';
 
 export const DaysPicker: React.FC = () => {
-  const [day, setDay] = useState(new Date());
+  const [day, setDay] = useRecoilState(dateState);
   const moveToNextDay = () => {
     setDay((crr) => add(crr, { days: 1 }));
   };

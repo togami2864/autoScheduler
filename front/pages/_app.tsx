@@ -1,4 +1,5 @@
 import React from 'react';
+import { RecoilRoot } from 'recoil';
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import styled from 'styled-components';
@@ -6,9 +7,11 @@ import styled from 'styled-components';
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>
-      <AppContainer>
-        <Component {...pageProps} />
-      </AppContainer>
+      <RecoilRoot>
+        <AppContainer>
+          <Component {...pageProps} />
+        </AppContainer>
+      </RecoilRoot>
     </ChakraProvider>
   );
 }
