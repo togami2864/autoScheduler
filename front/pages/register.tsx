@@ -18,16 +18,16 @@ import format from 'date-fns/format';
 export default function Register() {
   const router = useRouter();
   const [inputValue, setInputValue] = useState('');
-  const [inputSelectValue, setSelectValue] = useState('');
+  const [selectValue, setSelectValue] = useState('bad');
   const date = useRecoilValue(dateState);
   const dateId = format(date, 'yyyy_MM_dd');
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const isExist = await isItemExist(dateId);
     if (isExist) {
-      await insertItemData(dateId, inputValue, inputSelectValue);
+      await insertItemData(dateId, inputValue, selectValue);
     } else {
-      await writeNewItemData(dateId, inputValue, inputSelectValue);
+      await writeNewItemData(dateId, inputValue, selectValue);
     }
   };
   const handleDiscard = () => {
@@ -46,7 +46,7 @@ export default function Register() {
     <RegisterWrapper onSubmit={handleSubmit}>
       <ItemBox
         inputValue={inputValue}
-        selectValue={inputSelectValue}
+        selectValue={selectValue}
         setInputValue={(e) => {
           e.preventDefault();
           setInputValue(e.target.value);
