@@ -8,12 +8,14 @@ import { Button } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { Stack } from '@chakra-ui/react';
 
-import {
-  isItemExist,
-  writeNewItemData,
-  insertItemData,
-} from '../lib/writeItemData';
+import { writeNewItemData } from '../lib/writeItemData';
+import { getJSTDate } from '../lib/getJSTDate';
 import format from 'date-fns/format';
+import add from 'date-fns/add';
+
+import { db } from '../firebase/clientApp';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 
 export default function Register() {
   const router = useRouter();
@@ -21,15 +23,76 @@ export default function Register() {
   const [selectValue, setSelectValue] = useState('bad');
   const date = useRecoilValue(dateState);
   const dateId = format(date, 'yyyy_MM_dd');
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const isExist = await isItemExist(dateId);
-    if (isExist) {
-      await insertItemData(dateId, inputValue, selectValue);
+    const created_at = getJSTDate(new Date());
+    if (selectValue === 'bad') {
+      const oneDayLater = format(add(date, { days: 1 }), 'yyyy_MM_dd');
+      const oneWeekLater = format(add(date, { weeks: 1 }), 'yyyy_MM_dd');
+      const oneMonthLater = format(add(date, { months: 1 }), 'yyyy_MM_dd');
+      const fiveMonthLater = format(add(date, { months: 5 }), 'yyyy_MM_dd');
+      const days = [oneDayLater, oneWeekLater, oneMonthLater, fiveMonthLater];
+      for (const day of days) {
+        const itemRef = db.collection('todos').doc(day);
+        db.runTransaction((transaction) => {
+          return transaction.get(itemRef).then(async (doc) => {
+            if (!doc.exists) {
+              await transaction.set(itemRef, {
+                items: [
+                  {
+                    description: inputValue,
+                    created_at: created_at,
+                    status: selectValue,
+                  },
+                ],
+                updated: created_at,
+              });
+            } else {
+              await transaction.update(itemRef, {
+                items: firebase.firestore.FieldValue.arrayUnion({
+                  description: inputValue,
+                  created_at: created_at,
+                  status: selectValue,
+                }),
+              });
+            }
+          });
+        });
+      }
     } else {
-      await writeNewItemData(dateId, inputValue, selectValue);
+      const oneWeekLater = format(add(date, { weeks: 1 }), 'yyyy_MM_dd');
+      const days = [dateId, oneWeekLater];
+      for (const day of days) {
+        const itemRef = db.collection('todos').doc(day);
+        db.runTransaction((transaction) => {
+          return transaction.get(itemRef).then(async (doc) => {
+            if (!doc.exists) {
+              await transaction.set(itemRef, {
+                items: [
+                  {
+                    description: inputValue,
+                    created_at: created_at,
+                    status: selectValue,
+                  },
+                ],
+                updated: created_at,
+              });
+            } else {
+              await transaction.update(itemRef, {
+                items: firebase.firestore.FieldValue.arrayUnion({
+                  description: inputValue,
+                  created_at: created_at,
+                  status: selectValue,
+                }),
+              });
+            }
+          });
+        });
+      }
     }
   };
+
   const handleDiscard = () => {
     if (inputValue !== '') {
       const result = window.confirm('破棄して良いですか？');
