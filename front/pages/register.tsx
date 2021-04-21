@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { dateState } from '../states/dataState';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { ItemBox } from '../components/organisms/ItemBox';
@@ -6,25 +8,26 @@ import { Button } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { Stack } from '@chakra-ui/react';
 
-import { writeNewItemData } from '../lib/writeItemData';
+import {
+  isItemExist,
+  writeNewItemData,
+  insertItemData,
+} from '../lib/writeItemData';
 import format from 'date-fns/format';
 
 export default function Register() {
   const router = useRouter();
   const [inputValue, setInputValue] = useState('');
   const [inputSelectValue, setSelectValue] = useState('');
-  const handleSubmit = async () => {
-    await writeNewItemData(
-      format(new Date(), 'yyyy/MM/dd'),
-      inputValue,
-      inputSelectValue,
-    )
-      .then(() => {
-        console.log('sucess');
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+  const date = useRecoilValue(dateState);
+  const dateId = format(date, 'yyyy_MM_dd');
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isItemExist(dateId)) {
+      await insertItemData(dateId, inputValue, inputSelectValue);
+    } else {
+      await writeNewItemData(dateId, inputValue, inputSelectValue);
+    }
   };
   const handleDiscard = () => {
     if (inputValue !== '') {

@@ -1,3 +1,4 @@
+import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { db } from '../firebase/clientApp';
 import { getJSTDate } from './getJSTDate';
@@ -38,15 +39,13 @@ export const insertItemData = async (
 ) => {
   const created_at = getJSTDate(new Date());
   const itemDataRef = db.collection('todos').doc(date);
-  await itemDataRef.set(
-    {
-      items: [
-        { description: description, created_at: created_at, status: status },
-      ],
-    },
-    { merge: true },
-  );
+
   await itemDataRef.update({
+    items: firebase.firestore.FieldValue.arrayUnion({
+      date: date,
+      description: description,
+      status: status,
+    }),
     updated: created_at,
   });
 };
