@@ -23,7 +23,7 @@ export const ItemBox: React.FC<ItemBoxProps> = ({
         placeholder="今日勉強したことを入力してください"
       />
       <Select value={selectValue} onChange={setSelectValue}>
-        <option value="bad">完全に理解した()</option>
+        <option value="bad">完全に理解した</option>
         <option value="good">ﾁｮｯﾄﾃﾞｷﾙ</option>
       </Select>
     </ItemBoxWrapper>

@@ -23,7 +23,8 @@ export default function Register() {
   const dateId = format(date, 'yyyy_MM_dd');
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isItemExist(dateId)) {
+    const isExist = await isItemExist(dateId);
+    if (isExist) {
       await insertItemData(dateId, inputValue, inputSelectValue);
     } else {
       await writeNewItemData(dateId, inputValue, inputSelectValue);
