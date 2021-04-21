@@ -8,7 +8,6 @@ import { Button } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { Stack } from '@chakra-ui/react';
 
-import { writeNewItemData } from '../lib/writeItemData';
 import { getJSTDate } from '../lib/getJSTDate';
 import format from 'date-fns/format';
 import add from 'date-fns/add';
@@ -91,6 +90,8 @@ export default function Register() {
         });
       }
     }
+    setInputValue('');
+    router.push('/');
   };
 
   const handleDiscard = () => {
