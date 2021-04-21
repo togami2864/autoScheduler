@@ -5,13 +5,26 @@ import { ItemBox } from '../components/organisms/ItemBox';
 import { Button } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { Stack } from '@chakra-ui/react';
+
+import { writeNewItemData } from '../lib/writeItemData';
+import format from 'date-fns/format';
+
 export default function Register() {
   const router = useRouter();
   const [inputValue, setInputValue] = useState('');
   const [inputSelectValue, setSelectValue] = useState('');
-  const handleSubmit = () => {
-    console.log('success!');
-    router.push('/');
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    await writeNewItemData(
+      format(new Date(), 'yyyy/MM/dd'),
+      inputValue,
+      inputSelectValue,
+    )
+      .then(() => {
+        console.log('sucess');
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
   const handleDiscard = () => {
     if (inputValue !== '') {
@@ -30,8 +43,14 @@ export default function Register() {
       <ItemBox
         inputValue={inputValue}
         selectValue={inputSelectValue}
-        setInputValue={(e) => setInputValue(e.target.value)}
-        setSelectValue={(e) => setSelectValue(e.target.value)}
+        setInputValue={(e) => {
+          e.preventDefault();
+          setInputValue(e.target.value);
+        }}
+        setSelectValue={(e) => {
+          e.preventDefault();
+          setSelectValue(e.target.value);
+        }}
       />
       <Stack spacing={4} direction="column" align="center">
         <Button

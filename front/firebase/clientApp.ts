@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/performance';
+import 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -12,12 +13,16 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-if (!firebase.app.length) {
+if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
   if (typeof window !== 'undefined') {
     if ('measurementId' in firebaseConfig) {
       firebase.analytics();
       firebase.performance();
+      firebase.firestore();
     }
   }
 }
+
+const db = firebase.firestore();
+export { firebase, db };
