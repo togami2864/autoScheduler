@@ -13,7 +13,7 @@ export default function Register() {
   const router = useRouter();
   const [inputValue, setInputValue] = useState('');
   const [inputSelectValue, setSelectValue] = useState('');
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async () => {
     await writeNewItemData(
       format(new Date(), 'yyyy/MM/dd'),
       inputValue,
