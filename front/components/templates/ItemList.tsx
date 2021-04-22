@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 interface ItemListProps {
   todoItems: {
+    key: string;
     created_at: string;
     description: string;
     status: string;
@@ -14,7 +15,8 @@ export const ItemList: React.FC<ItemListProps> = ({ todoItems, isLoading }) => {
   return (
     <ItemListWrapper>
       <ul>
-        {!isLoading && todoItems.map((item) => <li>{item.description}</li>)}
+        {!isLoading &&
+          todoItems.map((item) => <li key={item.key}>{item.description}</li>)}
       </ul>
     </ItemListWrapper>
   );

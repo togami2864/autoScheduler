@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { dateState } from '../states/dataState';
 import { useRouter } from 'next/router';
-import styled, { ThemeConsumer } from 'styled-components';
+import styled from 'styled-components';
 import { Divider } from '@chakra-ui/react';
 import { DaysPicker } from '../components/organisms/DaysPicker';
 import { ItemList } from '../components/templates/ItemList';
@@ -14,6 +16,7 @@ import format from 'date-fns/format';
 import add from 'date-fns/add';
 
 type docData = {
+  key: string;
   created_at: string;
   description: string;
   status: string;
@@ -21,11 +24,13 @@ type docData = {
 
 export default function Home() {
   const router = useRouter();
-  const today = format(new Date(), 'yyyy_MM_dd');
-  const yesterday = format(add(new Date(), { days: -1 }), 'yyyy_MM_dd');
+  const day = useRecoilValue(dateState);
+  const today = format(day, 'yyyy_MM_dd');
+  const yesterday = format(add(day, { days: -1 }), 'yyyy_MM_dd');
 
   const [todayLearned, setTodayLearned] = useState<docData>([
     {
+      key: 'initial_yest',
       created_at: today,
       description: 'initial',
       status: 'bad',
@@ -33,6 +38,7 @@ export default function Home() {
   ]);
   const [yestLearned, setYestLearned] = useState<docData>([
     {
+      key: 'initial_today',
       created_at: today,
       description: 'There is no data',
       status: 'bad',
@@ -55,6 +61,7 @@ export default function Home() {
           } else {
             setTodayLearned([
               {
+                key: 'no_data_today',
                 created_at: today,
                 description: 'There is no data',
                 status: 'bad',
@@ -68,7 +75,7 @@ export default function Home() {
     };
 
     getToday();
-  }, []);
+  }, [day]);
 
   useEffect(() => {
     const getYest = async () => {
@@ -78,8 +85,9 @@ export default function Home() {
           if (doc.exists) {
             setYestLearned(doc.data().items);
           } else {
-            setTodayLearned([
+            setYestLearned([
               {
+                key: 'no_data_yest',
                 created_at: today,
                 description: 'There is no data',
                 status: 'bad',
@@ -92,7 +100,7 @@ export default function Home() {
         });
     };
     getYest();
-  }, []);
+  }, [day]);
 
   return (
     <>

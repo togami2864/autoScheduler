@@ -7,6 +7,7 @@ import { ItemBox } from '../components/organisms/ItemBox';
 import { Button } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { Stack } from '@chakra-ui/react';
+import { nanoid } from 'nanoid';
 
 import { getJSTDate } from '../lib/getJSTDate';
 import format from 'date-fns/format';
@@ -20,27 +21,28 @@ export default function Register() {
   const router = useRouter();
   const [inputValue, setInputValue] = useState('');
   const [selectValue, setSelectValue] = useState('bad');
-  const date = useRecoilValue(dateState);
-  const dateId = format(date, 'yyyy_MM_dd');
+  const day = useRecoilValue(dateState);
+  const dateId = format(day, 'yyyy_MM_dd');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const created_at = getJSTDate(new Date());
     if (selectValue === 'bad') {
-      const oneDayLater = format(add(date, { days: 1 }), 'yyyy_MM_dd');
-      const oneWeekLater = format(add(date, { weeks: 1 }), 'yyyy_MM_dd');
-      const oneMonthLater = format(add(date, { months: 1 }), 'yyyy_MM_dd');
-      const fiveMonthLater = format(add(date, { months: 5 }), 'yyyy_MM_dd');
+      const oneDayLater = format(add(day, { days: 1 }), 'yyyy_MM_dd');
+      const oneWeekLater = format(add(day, { weeks: 1 }), 'yyyy_MM_dd');
+      const oneMonthLater = format(add(day, { months: 1 }), 'yyyy_MM_dd');
+      const fiveMonthLater = format(add(day, { months: 5 }), 'yyyy_MM_dd');
       const days = [oneDayLater, oneWeekLater, oneMonthLater, fiveMonthLater];
       for (const day of days) {
         const itemRef = db.collection('todos').doc(day);
+        const uniqueKey = nanoid();
         db.runTransaction((transaction) => {
           return transaction.get(itemRef).then(async (doc) => {
             if (!doc.exists) {
               await transaction.set(itemRef, {
                 items: [
                   {
-                    id: firebase.firestore.Timestamp,
+                    key: uniqueKey,
                     description: inputValue,
                     created_at: created_at,
                     status: selectValue,
@@ -51,7 +53,7 @@ export default function Register() {
             } else {
               await transaction.update(itemRef, {
                 items: firebase.firestore.FieldValue.arrayUnion({
-                  id: firebase.firestore.Timestamp,
+                  key: uniqueKey,
                   description: inputValue,
                   created_at: created_at,
                   status: selectValue,
@@ -62,17 +64,18 @@ export default function Register() {
         });
       }
     } else {
-      const oneWeekLater = format(add(date, { weeks: 1 }), 'yyyy_MM_dd');
+      const oneWeekLater = format(add(day, { weeks: 1 }), 'yyyy_MM_dd');
       const days = [dateId, oneWeekLater];
       for (const day of days) {
         const itemRef = db.collection('todos').doc(day);
+        const uniqueKey = nanoid();
         db.runTransaction((transaction) => {
           return transaction.get(itemRef).then(async (doc) => {
             if (!doc.exists) {
               await transaction.set(itemRef, {
                 items: [
                   {
-                    id: firebase.firestore.Timestamp,
+                    key: uniqueKey,
                     description: inputValue,
                     created_at: created_at,
                     status: selectValue,
@@ -83,7 +86,7 @@ export default function Register() {
             } else {
               await transaction.update(itemRef, {
                 items: firebase.firestore.FieldValue.arrayUnion({
-                  id: firebase.firestore.Timestamp,
+                  key: uniqueKey,
                   description: inputValue,
                   created_at: created_at,
                   status: selectValue,
