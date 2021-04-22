@@ -32,7 +32,13 @@ export default function Register() {
       const oneWeekLater = format(add(day, { weeks: 1 }), 'yyyy_MM_dd');
       const oneMonthLater = format(add(day, { months: 1 }), 'yyyy_MM_dd');
       const fiveMonthLater = format(add(day, { months: 5 }), 'yyyy_MM_dd');
-      const days = [oneDayLater, oneWeekLater, oneMonthLater, fiveMonthLater];
+      const days = [
+        dateId,
+        oneDayLater,
+        oneWeekLater,
+        oneMonthLater,
+        fiveMonthLater,
+      ];
       for (const day of days) {
         const itemRef = db.collection('todos').doc(day);
         const uniqueKey = nanoid();
@@ -58,6 +64,7 @@ export default function Register() {
                   created_at: created_at,
                   status: selectValue,
                 }),
+                updated: created_at,
               });
             }
           });
@@ -91,6 +98,7 @@ export default function Register() {
                   created_at: created_at,
                   status: selectValue,
                 }),
+                updated: created_at,
               });
             }
           });
