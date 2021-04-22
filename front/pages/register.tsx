@@ -40,6 +40,7 @@ export default function Register() {
               await transaction.set(itemRef, {
                 items: [
                   {
+                    id: firebase.firestore.Timestamp,
                     description: inputValue,
                     created_at: created_at,
                     status: selectValue,
@@ -50,6 +51,7 @@ export default function Register() {
             } else {
               await transaction.update(itemRef, {
                 items: firebase.firestore.FieldValue.arrayUnion({
+                  id: firebase.firestore.Timestamp,
                   description: inputValue,
                   created_at: created_at,
                   status: selectValue,
@@ -70,6 +72,7 @@ export default function Register() {
               await transaction.set(itemRef, {
                 items: [
                   {
+                    id: firebase.firestore.Timestamp,
                     description: inputValue,
                     created_at: created_at,
                     status: selectValue,
@@ -80,6 +83,7 @@ export default function Register() {
             } else {
               await transaction.update(itemRef, {
                 items: firebase.firestore.FieldValue.arrayUnion({
+                  id: firebase.firestore.Timestamp,
                   description: inputValue,
                   created_at: created_at,
                   status: selectValue,

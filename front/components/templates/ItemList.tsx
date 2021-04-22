@@ -1,11 +1,20 @@
 import styled from 'styled-components';
 
-export const ItemList = () => {
+interface ItemListProps {
+  todoItems: {
+    created_at: string;
+    description: string;
+    status: string;
+  }[];
+  isLoading: boolean;
+}
+
+export const ItemList: React.FC<ItemListProps> = ({ todoItems, isLoading }) => {
+  console.log(todoItems);
   return (
     <ItemListWrapper>
       <ul>
-        <li>Best Time To Buy and Sell Stock</li>
-        <li>Best Time To Buy and Sell Stock</li>
+        {!isLoading && todoItems.map((item) => <li>{item.description}</li>)}
       </ul>
     </ItemListWrapper>
   );
