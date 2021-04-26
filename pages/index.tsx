@@ -75,7 +75,7 @@ export default function Home() {
     };
 
     getToday();
-  }, [day]);
+  }, [day, router.pathname]);
 
   useEffect(() => {
     const getYest = async () => {
@@ -100,7 +100,7 @@ export default function Home() {
         });
     };
     getYest();
-  }, [day]);
+  }, [day, router.pathname]);
 
   return (
     <>

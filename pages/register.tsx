@@ -71,8 +71,8 @@ export default function Register() {
         });
       }
     } else {
-      const oneWeekLater = format(add(day, { weeks: 1 }), 'yyyy_MM_dd');
-      const days = [dateId, oneWeekLater];
+      const oneMonthLater = format(add(day, { months: 1 }), 'yyyy_MM_dd');
+      const days = [dateId, oneMonthLater];
       for (const day of days) {
         const itemRef = db.collection('todos').doc(day);
         const uniqueKey = nanoid();
