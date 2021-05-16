@@ -1,34 +1,79 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# autoScheduler(MVP 段階)
 
-## Getting Started
+## 概要
 
-First, run the development server:
+- 勉強したことの自己評価によって自動で todo を登録(１ヶ月後、５ヶ月後など)
+- 毎朝 8:30 に github actions が実行され slack に今日のタスクが表示される。
+  ![イメージ](https://user-images.githubusercontent.com/62130798/118392826-880ece80-b676-11eb-9aa2-ba0162865314.png)
 
-```bash
-npm run dev
-# or
-yarn dev
+  ![slack](https://user-images.githubusercontent.com/62130798/118393338-9d392c80-b679-11eb-8d07-cc3e8d4d11b9.png)
+
+## 動機
+
+## 要件
+
+- 自動で日付計算して登録。
+- 永続化のための DB がある。
+- DB スキャンを毎日実行して slack 送信し、習慣化につなげる。(毎日 PC をみるため確実/スマホだと気が散る、忘れがちなため)。
+
+## 技術スタック
+
+Front: Next.js
+Backend,DB: FireStore(FireBase)
+
+主なライブラリ:
+UI: ChakraUI, Styled-Components
+状態管理: Recoil
+
+### slackbot
+
+言語:Golang
+定期実行: GithubActions
+
+## アーキテクチャ概略図
+
+![アーキテクチャ](https://user-images.githubusercontent.com/62130798/118393220-eccb2880-b678-11eb-9d66-f3e72a7ceac0.png)
+
+1. クライアント(next.js)側から FireStore に対して書き込み.
+2. 毎朝 github actions が Golang で書いたコードを実行・読み取り。
+3. slack に通知。
+
+## 自己評価
+
+現状２種類の評価がある。
+
+1. チョットデキル(一回で解けた、good 評価)
+2. 完全に理解した(できなかった、bad 評価)
+
+![評価](https://user-images.githubusercontent.com/62130798/118393059-edaf8a80-b677-11eb-925c-052b093e8430.png)
+
+例): 4 月 23 日に LeetCode の#121 の問題を解いた。
+
+`できなかった` -> 1 日、１週間、１ヶ月、５ヶ月後に登録。期間を開けて継続的にリマインドすることで定着を施す。
+![bad](https://user-images.githubusercontent.com/62130798/118393278-43386700-b679-11eb-9413-6207079f8a6a.png)
+
+`一回で解けた` -> １ヶ月後の日付に登録。
+
+## DB のデータ構造
+
+・FireStore: document 型の NoSQL
+
+日付を ID として設定する。
+ID に対して
+
+- item
+
+```
+{
+    created_at:string,
+    description: string,
+    key: string,
+    status: boolean
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+というオブジェクトを格納する List 構造
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- updated: string
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+というデータを格納する。
