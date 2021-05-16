@@ -3,7 +3,7 @@
 ## 概要
 
 - 勉強したことの自己評価によって自動で todo を登録(１ヶ月後、５ヶ月後など)
-- 毎朝 8:30 に github actions が実行され slack に今日のタスクが表示される。  
+- 毎朝 8:30 に github actions が実行され slack に今日のタスクが表示される。
 
   ![イメージ](https://user-images.githubusercontent.com/62130798/118392826-880ece80-b676-11eb-9aa2-ba0162865314.png)
 
@@ -11,24 +11,29 @@
 
 ## 動機
 
+- メモしたものをなくしがちだった。(スマホは気が散るので基本的に紙に書いてた。)
+- 何日後か計算するのが面倒。
+- 定期イベントをパット作れるのがなかった。
+- 技術的な遊び場がほしかった。
+
 ## 要件
 
 - 自動で日付計算して登録。
 - 永続化のための DB がある。
 - DB スキャンを毎日実行して slack 送信し、習慣化につなげる。(毎日 PC をみるため確実/スマホだと気が散る、忘れがちなため)。
 
-## 技術スタック  
+## 技術スタック
 
-Front: Next.js  
-Backend,DB: FireStore(FireBase)  
+Front: Next.js
+Backend,DB: FireStore(FireBase)
 
-主なライブラリ:  
-UI: ChakraUI, Styled-Components  
-状態管理: Recoil  
+主なライブラリ:
+UI: ChakraUI, Styled-Components
+状態管理: Recoil
 
 ### slackbot
 
-言語:Golang  
+言語:Golang
 定期実行: GithubActions
 
 ## アーキテクチャ概略図
