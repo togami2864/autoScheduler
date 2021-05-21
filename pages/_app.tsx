@@ -1,6 +1,7 @@
 import React from 'react';
 import { RecoilRoot } from 'recoil';
 import type { AppProps } from 'next/app';
+import { AuthProvider } from '../context/Auth';
 import { ChakraProvider } from '@chakra-ui/react';
 import styled from 'styled-components';
 
@@ -9,7 +10,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ChakraProvider>
       <RecoilRoot>
         <AppContainer>
-          <Component {...pageProps} />
+          <AuthProvider>
+            <Component {...pageProps} />
+          </AuthProvider>
         </AppContainer>
       </RecoilRoot>
     </ChakraProvider>

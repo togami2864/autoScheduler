@@ -11,7 +11,6 @@ interface ItemListProps {
 }
 
 export const ItemList: React.FC<ItemListProps> = ({ todoItems, isLoading }) => {
-  console.log(todoItems);
   return (
     <ItemListWrapper>
       <ul>

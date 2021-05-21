@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from 'react';
-
 import { firebase } from '../firebase/clientApp';
 
 type AuthContextProps = {

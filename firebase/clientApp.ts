@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/analytics';
+import 'firebase/auth';
 import 'firebase/performance';
 import 'firebase/firestore';
 
@@ -20,6 +21,7 @@ if (!firebase.apps.length) {
       firebase.analytics();
       firebase.performance();
       firebase.firestore();
+      firebase.auth();
     }
   }
 }
