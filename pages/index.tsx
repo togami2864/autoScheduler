@@ -9,7 +9,7 @@ import { ItemList } from '../components/templates/ItemList';
 import { Button } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 
-import { db } from '../firebase/clientApp';
+import { db, firebase } from '../firebase/clientApp';
 import 'firebase/firestore';
 
 import format from 'date-fns/format';
@@ -27,6 +27,14 @@ export default function Home() {
   const day = useRecoilValue(dateState);
   const today = format(day, 'yyyy_MM_dd');
   const yesterday = format(add(day, { days: -1 }), 'yyyy_MM_dd');
+
+  const [currentUser, setCurrentUser] = useState<null | object>(null);
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      user ? setCurrentUser(user) : router.push('/login');
+    });
+  }, []);
 
   const [todayLearned, setTodayLearned] = useState<docData>([
     {
